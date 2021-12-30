@@ -1,0 +1,124 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+{% load static %}
+<div class="foto" > 
+    <h3>{{ producto.nombre }}</h3>
+</div>
+<hr>
+<div class="foto">
+    <img class="block-img" src="{% static 'img/arregloBase.jpeg' %}" >
+</div>
+<div class="pedido" >
+    <div class="block-description" >
+        <h3>Descripcion:</h3>
+        <p>{{ producto.descripcion }}</p>  
+        <br>
+        <!-- en la pagina que me estoy guiando usan una ul para poder poner una 
+        descripcion acorde con el producto seleccionado -->
+        <p>Nuestros deliciosos productos son elaborados bajo estrictas normas de higiene y seguridad alimentaria para garantizar su calidad y frescura.</p>
+        <p>En Frutale`s somos amigos del planeta y de la calidad de vida de sus habitantes, come frutas, mantente saludable!</p>
+        <br>
+        <p> <strong>Nuestros arreglos tienen un tiempo de duración de 2 días, siempre y cuando esté bien refrigerado. Los pedidos deben ser realizados minimo con 2 dias de anticipacion </strong> </p>
+    </div>
+    <br>
+
+   <form action="/addtocart" method="POST">
+       {% csrf_token %}
+        <div>
+            <div>
+                <table class="table" >
+                    <thead>
+                                <tr>
+                                    <th>TAMAÑO</th>
+                                    <th>PRECIO</th>
+                                    <th>SELECCIONAR</th>
+                                </tr>
+                    </thead>
+                    <tbody>
+                        
+                        {% for p in row %}
+                            <tr>
+                                    
+                                <td>
+                                    {{p.tamaño}}
+                                </td>
+                                <td>
+                                    {{p.precio}}
+                                </td>
+                                
+                                <td>
+                                    <div>
+                                        <input required type="radio" name= "tamañoproducto" value="{{p.tamaño}}">
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ADICIONAL</th>
+                            <th>PRECIO</th>
+                            <th>SELECCIONAR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Rosas</td>
+                            <td>2.500</td>
+                            <td><input name="rosaadicional" type="number" min="0"></td>
+                        </tr>
+                        <tr>
+                            <td>Globo pequeño</td>
+                            <td>5.000</td>
+                            <td><input required type="radio" value="globopequeño" name= "globoadicional"></td>
+                        </tr>
+                        <tr>
+                            <td>Globo grande</td>
+                            <td>10.000</td>
+                            <td><input required type="radio" value="globopequeño" name= "globoadicional"></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <textarea name="especificaciones" id="" cols="70" rows="5" placeholder="aqui agregar sus adicionales el precio de arriba es referncial"></textarea>
+            
+            <div>
+                <label>
+                    Seleccione Tipo de entrega
+                </label>
+                <select name="entrega" id="">
+                    <option value="">Seleccione</option>
+                    <option value="Entrega a domicilio">Entrega a domicilio</option>
+                    <option value="Retirare mi pedido de manera gratuita">Retirare mi pedido de manera gratuita</option>
+                </select>
+            </div>
+            <div>
+                <div>
+                    <label>
+                        Ciudad
+                    </label>
+                    <select name="ciudad" id="">
+                        <option value="Valparaiso">Valparaiso</option>
+                        <option value="Viña del mar">Viña del mar </option>
+                        <option value="Reñaca">Reñaca</option>
+                        <option value="Quilpue">Quilpue</option>
+                        <option value="Belloto">Belloto</option>
+                        <option value="Villa alemana">Villa alemana</option>
+                        <option value="Limache">Limache</option>
+                        
+                    </select>
+                </div>
+            </div>
+        </div> 
+        <input type="hidden" value="{{ producto.nombre }}" name="pedido">
+        <button type="submit" >Añadir al carrito</button>    
+   </form> <!--  en el action redirigir al carrito y el metodo post -->
+</div>
+
+{% endblock %}

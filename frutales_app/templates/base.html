@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %} 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia&effect=neon|outline|emboss|shadow-multiple">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Document</title>
+    
+</head>
+<body>
+    <header>
+        <nav class="navbar" > 
+            {% if "user_id" in request.session %}
+            <!-- <img id="navlogo" src="{% static 'img/logo-frutales1.jpeg' %}" alt=""> -->
+            <img onclick='location.href="/"' id="navlogo" src="{% static 'img/logo-frutales1.jpeg' %}" alt="">
+            <h3>Hola {{ request.session.name }}</h3>
+            <h4 class="contenido-nav">carrito</h4>
+            <a href="/logout">logout</a>
+            {% else %}
+            <!-- <img id="navlogo" src="{% static 'img/logo-frutales1.jpeg' %}" alt=""> -->
+            <img onclick='location.href="/"' id="navlogo" src="{% static 'img/logo-frutales1.jpeg' %}" alt="">
+            <a href="/create" class="contenido-nav" >Registrate</a>
+            <a href="/login"class="contenido-nav">Ingresa</a>
+            <h4 class="contenido-nav">carrito</h4>
+            {% endif %}
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+
+
+        
+        {% endblock %}
+    </main>
+    <footer>
+
+    </footer>
+    {% load static %}
+    <script src="{% static 'js/index.js' %}"></script>
+</body>
+</html>

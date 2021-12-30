@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %} 
+    <link rel="stylesheet" href="{% static 'css/registro-login.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    <nav class="navbar" > 
+        <!-- <a  href="/">
+            <img id="navlogo-a" src="{% static 'img/logo-frutales1.jpeg' %}" alt="">
+        </a> -->
+        <img onclick='location.href="/"' id="navlogo" src="{% static 'img/logo-frutales1.jpeg' %}" alt="">
+        <!-- <a href="/">Volver</a> -->
+    </nav>
+    <div class="register-container">
+        {% if messages %}
+        <ul class="messages">    
+            {% for message in messages %}    
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+            {% endfor %}
+        </ul>
+        {% endif %}
+        
+        <h1>Login</h1>
+        <form action="login" method="POST">
+            {% csrf_token %}
+            <!-- <p><label for="id_email">Email:</label> <input type="email" name="email" id="id_email"></p>
+            <p><label for="id_password">Password:</label> <input type="password" name="password" id="id_password"></p> -->
+            {{ loginForm }}
+            <input class="register-btn"  type="submit" value="login">
+        </form>
+    </div>
+    
+</body>
+</html>
