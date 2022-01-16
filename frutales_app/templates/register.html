@@ -23,7 +23,7 @@
         </ul>
         {% endif %}
         <h1>Registro</h1>
-        <form action="create" method="POST">
+        <form action="/create" method="POST">
             {% csrf_token %}
             <p>
                 <label for="id_first_name">First name:</label> <input type="text" name="first_name" id="id_first_name">

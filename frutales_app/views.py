@@ -2,7 +2,6 @@ import re
 from django.http import request
 from django.shortcuts import redirect, render
 from .forms import LoginForm, UserForm
-from .models import User
 import bcrypt
 from django.contrib import messages
 from .models import *
@@ -23,13 +22,13 @@ def login(request):
         if loginForm.is_valid():
             formPassword = loginForm['password'].value()
             loginEmail = loginForm['email'].value()
-            logged_user = User.objects.filter(email=loginEmail)[0]
+            logged_user = Usuario.objects.filter(email=loginEmail)[0]
 
             if bcrypt.checkpw(formPassword.encode(), logged_user.password.encode()):
                 print('password is correct')
                 request.session['user_id'] = logged_user.id
                 request.session['name'] = logged_user.first_name
-                return redirect('/home-user')
+                return redirect('/')
             else:
                 print('password is incorrect')
                 return redirect('/login')
@@ -46,15 +45,15 @@ def createUser(request):
     if request.method == 'POST':
         # formResults = UserForm(request.POST)
         # validResults = formResults.is_valid()
-        errors = User.objects.basic_validator(request.POST)
+        errors = Usuario.objects.basic_validator(request.POST)
         if len(errors) > 0:
             print('errors exist')
         # si el diccionario de errores contiene algo, recorra cada par clave-valor y cree un mensaje flash
             for key, value in errors.items():
                 messages.error(request, value)
-            return redirect('/home-user')
+            return redirect('/register')
         else:
-            user_exist = User.objects.filter(email=request.POST['email'])
+            user_exist = Usuario.objects.filter(email=request.POST['email'])
             print(user_exist)
             if not user_exist:     
                 first_name = request.POST['first_name']
@@ -62,7 +61,7 @@ def createUser(request):
                 email = request.POST['email']
                 password = request.POST['password']
                 pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
-                logged_user = User.objects.create(first_name=first_name, last_name=last_name, email=email, password=pw_hash)
+                logged_user = Usuario.objects.create(first_name=first_name, last_name=last_name, email=email, password=pw_hash)
                 request.session['user_id'] = logged_user.id
                 request.session['name'] = logged_user.first_name
                 # User.objects.create(...)
@@ -77,10 +76,10 @@ def createUser(request):
                 # else:
                 #     print('user alread exist')
                 # return redirect('/register')
-                return render(request, 'register.html')
+                return redirect('/')
             else: 
                 messages.error(request, 'Email is already being used')
-                return redirect('/home-user')
+                return redirect('/login')
         # print(validResults)
         print('form is FALSE')
         # context = {
@@ -97,6 +96,7 @@ def producto(request,nombre):
     context = {}
     tamaño = "pequeño,mediano,grande"
     tamaño = tamaño.split(',')
+
     if nombre == "ramos":
         producto= Producto.objects.get(id=1)
         print(producto)
@@ -108,6 +108,7 @@ def producto(request,nombre):
         context={
             "producto":producto,
             "row":row,
+            "range":range(1,5),
         }
 
     elif nombre == "corazon":
@@ -121,6 +122,7 @@ def producto(request,nombre):
         context={
             "producto":producto,
             "row":row,
+            "range":range(1,5),
         }
     
     elif nombre == "bandeja":
@@ -134,6 +136,7 @@ def producto(request,nombre):
         context={
             "producto":producto,
             "row":row,
+            "range":range(1,5),
         }
 
     elif nombre == "basico":
@@ -147,8 +150,10 @@ def producto(request,nombre):
         context={
             "producto":producto,
             "row":row,
+            "range":range(1,5),
         }
     print (nombre)
+    
     return render(request, 'producto.html',context)
 
 def addtocart(request):

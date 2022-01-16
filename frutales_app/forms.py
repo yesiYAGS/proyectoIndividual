@@ -1,5 +1,5 @@
 from django import forms
-from .models import User
+from .models import Usuario
 import bcrypt
 
 class LoginForm(forms.Form):
@@ -10,7 +10,7 @@ class UserForm(forms.ModelForm):
     confirmed_pw = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
-        model = User
+        model = Usuario
         fields = '__all__'
         widgets = {
             'password': forms.PasswordInput,
@@ -44,5 +44,5 @@ class UserForm(forms.ModelForm):
         # your logic or Save your object for example:
         pw = self.cleaned_data["password"]
         pw_hash = bcrypt.hashpw(pw.encode(), bcrypt.gensalt()).decode()
-        user = User.objects.create(first_name=self.cleaned_data["first_name"], last_name=self.cleaned_data["last_name"], email=self.cleaned_data["email"], password=pw_hash)
+        user = Usuario.objects.create(first_name=self.cleaned_data["first_name"], last_name=self.cleaned_data["last_name"], email=self.cleaned_data["email"], password=pw_hash)
         return user
