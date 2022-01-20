@@ -157,13 +157,17 @@ def producto(request,nombre):
     return render(request, 'producto.html',context)
 
 def addtocart(request):
+    u = Usuario.objects.get(id = request.session['user_id']) 
+    print ("funcion de addtocart")
     pedido = request.POST["pedido"]
+    print(pedido)
     p=Producto.objects.filter(nombre = pedido)
     print("encontrado")
     print(p)
     
     tamañoproducto = request.POST["tamañoproducto"]
     rosaadicional = request.POST["rosaadicional"]
+    print(rosaadicional)
     rosaadicional = int(rosaadicional)
     if rosaadicional >0:
         adicional = Adicional.objects.filter(nombre = "Rosas")
@@ -183,7 +187,10 @@ def addtocart(request):
     especificaciones = request.POST["especificaciones"]
     entrega = request.POST["entrega"]
     ciudad = request.POST["ciudad"]
-    Orden.objects.create(producto = p[0], tamañoproducto = tamañoproducto, rosaadicional = rosas_adicional, globoadicional = globo_adicional, especificaciones = especificaciones, entrega = entrega, ciudad = ciudad)
+    Orden.objects.create(producto = p[0], usuario = u ,tamañoproducto = tamañoproducto, rosaadicional = rosas_adicional, globoadicional = globo_adicional, especificaciones = especificaciones, entrega = entrega, ciudad = ciudad)
     # print(pedido)
     # print(request.POST)
-    return redirect('/')
+    return render(request,'carrito.html')
+
+def carrito(request):
+    return render(request,'carrito.html')

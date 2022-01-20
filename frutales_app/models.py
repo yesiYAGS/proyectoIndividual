@@ -50,6 +50,7 @@ class AdicionalOrden(models.Model):
 
 class Orden(models.Model):
     producto = models.ForeignKey(Producto,on_delete=models.CASCADE)
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     tamañoproducto = models.CharField(max_length=100)
     rosaadicional = models.ForeignKey(AdicionalOrden, related_name="rosas" ,on_delete=models.CASCADE)
     globoadicional = models.ForeignKey(AdicionalOrden,related_name="globos",on_delete=models.CASCADE)

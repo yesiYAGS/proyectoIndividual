@@ -16,13 +16,13 @@
         <nav class="navbar" > 
             {% if "user_id" in request.session %}
             <!-- <img id="navlogo" src="{% static 'img/logo-frutales1.jpeg' %}" alt=""> -->
-            <img onclick='location.href="/"' id="navlogo" src="{% static 'img/logo-frutales1.jpeg' %}" alt="">
+            <img onclick='location.href="/"' id="navlogo" src="{% static 'img/logo-frutales1.png' %}" alt="">
             <h3>Hola {{ request.session.name }}</h3>
             <h4 class="contenido-nav">carrito</h4>
             <a href="/logout">logout</a>
             {% else %}
             <!-- <img id="navlogo" src="{% static 'img/logo-frutales1.jpeg' %}" alt=""> -->
-            <img onclick='location.href="/"' id="navlogo" src="{% static 'img/logo-frutales1.jpeg' %}" alt="">
+            <img onclick='location.href="/"' id="navlogo" src="{% static 'img/logo-frutales1.png' %}" alt="">
             <a href="/create" class="contenido-nav" >Registrate</a>
             <a href="/login"class="contenido-nav">Ingresa</a>
             <h4 class="contenido-nav">carrito</h4>
