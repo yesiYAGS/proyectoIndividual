@@ -11,14 +11,26 @@
     <title>Document</title>
     
 </head>
-<body background= url(https://www.wallpaperbetter.com/es/hd-wallpaper-zsgcf)>
+<body >
     <header>
         <nav class="navbar" > 
             {% if "user_id" in request.session %}
             <!-- <img id="navlogo" src="{% static 'img/logo-frutales1.jpeg' %}" alt=""> -->
             <img onclick='location.href="/"' id="navlogo" src="{% static 'img/logo-frutales1.png' %}" alt="">
             <h3>Hola {{ request.session.name }}</h3>
-            <h4 class="contenido-nav">carrito</h4>
+            <a href="/carrito"><h4 class="contenido-nav">carrito</h4></a>
+            <div id="cartInfo" class="cartInfo">
+  
+                <span id="numItemsInCartHelpText" value="Your shopping cart has">
+                    <span id="itemHelpText" value="Item">
+                        <span id="itemsHelpText" value="Items">
+                            <a href="/coursebasket/publicCourseBasket.do?method=load" id="shoppingCartLink" title="Your shopping cart has 0 items" aria-label="Your shopping cart has 0 items"><span class="glyphicon-shopping-cart glyphicon"></span>
+                            <span id="cartCount" class="badge rounded-circle badge-warning">0</span></a>
+                        </span>
+                    </span>
+                </span>
+            
+            </div>
             <a href="/logout">logout</a>
             {% else %}
             <!-- <img id="navlogo" src="{% static 'img/logo-frutales1.jpeg' %}" alt=""> -->

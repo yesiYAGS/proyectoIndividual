@@ -27,6 +27,7 @@ class UserManager(models.Manager):
 class Usuario(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
+    number_phone= models.CharField(max_length = 13)
     email = models.EmailField()
     password = models.CharField(max_length=255)
     objects = UserManager()
@@ -37,6 +38,10 @@ class Producto(models.Model):
     
     nombre = models.CharField(max_length=30)
     descripcion = models.TextField()
+    # image=models.ImageField(upload_to="productos", null=True)
+
+class Precio(models.Model):
+    producto = models.ForeignKey(Producto, related_name = "precio", on_delete=models.CASCADE)
     precio = models.CharField(max_length=90)
     tamaño = models.CharField(max_length=80)
 
@@ -57,3 +62,6 @@ class Orden(models.Model):
     especificaciones = models.TextField()
     entrega = models.CharField(max_length=50)
     ciudad = models.CharField(max_length=50)
+    finalizado = models.BooleanField(default=False)
+    created_at = models.TimeField(auto_now=True)
+    updated_at =  models.TimeField(auto_now=True)

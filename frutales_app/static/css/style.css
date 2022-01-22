@@ -244,6 +244,6 @@ body{
   opacity: 0.8;
   padding: 10px;
   border-radius: 5px;
-  display: inline-block;
-  align-items: center;
+  display: flex;
+  align-content: center;
 }

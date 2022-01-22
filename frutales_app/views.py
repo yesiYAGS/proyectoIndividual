@@ -1,3 +1,4 @@
+from multiprocessing import context
 import re
 from django.http import request
 from django.shortcuts import redirect, render
@@ -59,9 +60,10 @@ def createUser(request):
                 first_name = request.POST['first_name']
                 last_name = request.POST['last_name']
                 email = request.POST['email']
+                number_phone = request.POST['number_phone']
                 password = request.POST['password']
                 pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
-                logged_user = Usuario.objects.create(first_name=first_name, last_name=last_name, email=email, password=pw_hash)
+                logged_user = Usuario.objects.create(first_name=first_name, last_name=last_name, email=email, number_phone = number_phone, password=pw_hash)
                 request.session['user_id'] = logged_user.id
                 request.session['name'] = logged_user.first_name
                 # User.objects.create(...)
@@ -100,11 +102,11 @@ def producto(request,nombre):
     if nombre == "ramos":
         producto= Producto.objects.get(id=1)
         print(producto)
-        producto.tamaño=producto.tamaño.split(',')
-        producto.precio=producto.precio.split(',')
         row=[]
-        for i in range (len(producto.tamaño)):
-            row.append({"tamaño":producto.tamaño[i],"precio":producto.precio[i]})
+        precio = Precio.objects.filter(producto = producto)
+        for i in precio:
+            print(i, "Este es el i")
+            row.append(i)
         context={
             "producto":producto,
             "row":row,
@@ -114,11 +116,11 @@ def producto(request,nombre):
     elif nombre == "corazon":
         producto= Producto.objects.get(id=2)
         print(producto)
-        producto.tamaño=producto.tamaño.split(',')
-        producto.precio=producto.precio.split(',')
         row=[]
-        for i in range (len(producto.tamaño)):
-            row.append({"tamaño":producto.tamaño[i],"precio":producto.precio[i]})
+        precio = Precio.objects.filter(producto = producto)
+        for i in precio:
+            print(i, "Este es el i")
+            row.append(i)
         context={
             "producto":producto,
             "row":row,
@@ -128,11 +130,11 @@ def producto(request,nombre):
     elif nombre == "bandeja":
         producto= Producto.objects.get(id=3)
         print(producto)
-        producto.tamaño=producto.tamaño.split(',')
-        producto.precio=producto.precio.split(',')
         row=[]
-        for i in range (len(producto.tamaño)):
-            row.append({"tamaño":producto.tamaño[i],"precio":producto.precio[i]})
+        precio = Precio.objects.filter(producto = producto)
+        for i in precio:
+            print(i, "Este es el i")
+            row.append(i)
         context={
             "producto":producto,
             "row":row,
@@ -142,11 +144,11 @@ def producto(request,nombre):
     elif nombre == "basico":
         producto= Producto.objects.get(id=4)
         print(producto)
-        producto.tamaño=producto.tamaño.split(',')
-        producto.precio=producto.precio.split(',')
         row=[]
-        for i in range (len(producto.tamaño)):
-            row.append({"tamaño":producto.tamaño[i],"precio":producto.precio[i]})
+        precio = Precio.objects.filter(producto = producto)
+        for i in precio:
+            print(i, "Este es el i")
+            row.append(i)
         context={
             "producto":producto,
             "row":row,
@@ -164,8 +166,16 @@ def addtocart(request):
     p=Producto.objects.filter(nombre = pedido)
     print("encontrado")
     print(p)
+    notOrden = Orden.objects.filter(usuario = u, finalizado = False)
+    if notOrden:
+        print("entra al condiconal notorden")
+        messages.info(request,"Por favor termina tu pedido pendiente")
+        return redirect("/carrito")
+    
+    print("no entro al condicional notorden")
     
     tamañoproducto = request.POST["tamañoproducto"]
+
     rosaadicional = request.POST["rosaadicional"]
     print(rosaadicional)
     rosaadicional = int(rosaadicional)
@@ -190,7 +200,38 @@ def addtocart(request):
     Orden.objects.create(producto = p[0], usuario = u ,tamañoproducto = tamañoproducto, rosaadicional = rosas_adicional, globoadicional = globo_adicional, especificaciones = especificaciones, entrega = entrega, ciudad = ciudad)
     # print(pedido)
     # print(request.POST)
-    return render(request,'carrito.html')
+    return redirect('/carrito')
 
 def carrito(request):
-    return render(request,'carrito.html')
+    u = Usuario.objects.get(id = request.session['user_id']) 
+    orden = Orden.objects.filter(usuario = u, finalizado = False)
+    
+    print(orden[0].tamañoproducto)
+    
+    if orden :
+        precio = Precio.objects.filter(producto =orden[0].producto, tamaño = orden[0].tamañoproducto)
+        print(orden[0].rosaadicional)
+        ra = orden[0].rosaadicional
+        cantidad = int(ra.cantidad)
+        p = float(ra.nombre_adicional.precio)
+        print(ra, "RA")
+        print(cantidad, "cantidad")
+        print(p,"precio")
+        p_total = p * cantidad
+        print(p_total)
+        ga = orden[0].globoadicional
+        pg = float(ga.nombre_adicional.precio)
+        total = p_total + pg + float(precio[0].precio)
+        print(total)
+        print(precio[0].precio, "este es el precio") 
+
+        context = {
+        "orden":orden[0],
+        "precio":precio[0],
+        "total_rosas":p_total,
+        "total":total,
+        }    
+
+        return render(request,'carrito.html', context)
+
+    return redirect ("/")

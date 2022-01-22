@@ -11,9 +11,36 @@
   <a href="/coursebasket/publicCourseBasket.do?method=load" id="shoppingCartLink" title="Your shopping cart has 0 items" aria-label="Your shopping cart has 0 items"><span class="glyphicon-shopping-cart glyphicon"></span>
     <span id="cartCount" class="badge rounded-circle badge-warning">0</span></a>
 </span></span></span></div> -->
+<div>
+  <p>El precio solo toma lo seleccionado, si usted quiere agregar otros 
+    elementos y lo coloco en el cuadro de adicional su total sera actualizado mediente mensaje </p>
+  <h4>Este es su pedido:</h4>
+</div>
 <div class="carrito-container">
-    <p>aqui aparece el carrito</p>
     
+    {% if messages %}
+    <ul class="messages">    
+        {% for message in messages %}    
+            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <h2> {{ orden.producto.nombre }}</h2>
+    <h3>{{ precio.tamaño }}</h3>
+    <h5>{{ orden.rosaadicional.nombre_adicional.nombre }}</h5>
+    <h5>{{ orden.rosaadicional.cantidad }}</h5>
+    <h5>{{ orden.globoadicional.nombre_adicional.nombre }}</h5>
+</div>
+
+<div>
+  <h1>Subtotal:</h1>
+  <h2>$ {{ precio.precio }} CLP</h2>
+  <h3>Adicionales:</h3>
+  <h4>$ {{ total_rosas }}00 CLP</h4>
+  <h4>$ {{ orden.globoadicional.nombre_adicional.precio }}00 CLP</h4>
+  <h1>Total:</h1>
+  <h2>$ {{ total }}00 CLP</h2>
 </div>
 
 {% endblock %}
