@@ -179,9 +179,11 @@ def addtocart(request):
     rosaadicional = request.POST["rosaadicional"]
     print(rosaadicional)
     rosaadicional = int(rosaadicional)
-    if rosaadicional >0:
+    if rosaadicional >=0:
         adicional = Adicional.objects.filter(nombre = "Rosas")
+        print(adicional)
         rosas_adicional = AdicionalOrden.objects.create(nombre_adicional = adicional[0], cantidad = rosaadicional )
+        print(rosas_adicional.cantidad, 'rosas adicionales')
     
     
     globoadicional = request.POST["globoadicional"]
@@ -197,6 +199,7 @@ def addtocart(request):
     especificaciones = request.POST["especificaciones"]
     entrega = request.POST["entrega"]
     ciudad = request.POST["ciudad"]
+    print(p[0].nombre,u, tamañoproducto,rosas_adicional.cantidad,globo_adicional.nombre_adicional.nombre,especificaciones,entrega, ciudad)
     Orden.objects.create(producto = p[0], usuario = u ,tamañoproducto = tamañoproducto, rosaadicional = rosas_adicional, globoadicional = globo_adicional, especificaciones = especificaciones, entrega = entrega, ciudad = ciudad)
     # print(pedido)
     # print(request.POST)
@@ -205,8 +208,7 @@ def addtocart(request):
 def carrito(request):
     u = Usuario.objects.get(id = request.session['user_id']) 
     orden = Orden.objects.filter(usuario = u, finalizado = False)
-    
-    print(orden[0].tamañoproducto)
+    # print(orden[0].tamañoproducto)
     
     if orden :
         precio = Precio.objects.filter(producto =orden[0].producto, tamaño = orden[0].tamañoproducto)
@@ -233,5 +235,21 @@ def carrito(request):
         }    
 
         return render(request,'carrito.html', context)
+    else:
+        print("No hay productos seleccionados")
+        return render(request, 'carrito.html')
 
     return redirect ("/")
+
+def finalizarOrden(request):
+    ordenF_id = request.POST["orden-final"] 
+    ordenF = Orden.objects.filter(id=ordenF_id)[0]
+    ordenF.finalizado = True
+    ordenF.save()
+    return render(request, 'OrdenFinalizada.html')
+
+def eliminarOrden(request):
+    Eorden_id = request.POST["eliminar-orden"] 
+    Eorden = Orden.objects.get(id=Eorden_id)
+    Eorden.delete()
+    return redirect('/')
